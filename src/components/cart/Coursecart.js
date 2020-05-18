@@ -4,7 +4,8 @@ import Img from 'gatsby-image'
 export default class Coursecart extends Component {
     state={
         courses:[],
-        mycourses:[]
+        mycourses:[],
+        categories:['all','Mobile','Web']
     }
     componentDidMount(){
         this.setState({
@@ -12,12 +13,40 @@ export default class Coursecart extends Component {
             mycourses:this.props.courses.edges
         });
     }
+
+    categoryClicked =(category)=>{
+        if(category==='all'){
+            this.setState({mycourses:this.state.courses});
+        }
+        else{
+            let filteredCoursesByCategory = this.state.courses.filter(course=>course.node.category===category);
+            this.setState({mycourses:filteredCoursesByCategory});
+        }
+       
+    }
     render() {
         
         return (
             <section className="py-5">
                 <div className="container">
                       <Heading title="courses"/>
+                      <div className="row my-3">
+                          <div className="col-10 mx-auto text-center">
+                                    {this.state.categories.map((category,i)=>{
+                                        return (
+                                            <button type="button" 
+                                            key={i} 
+                                            className="btn btn-info m-3 px-3"
+                                            onClick={()=>{
+                                                this.categoryClicked(category)
+                                            }}>
+                                                {category}
+                                            </button>
+                                        );
+                                    })}
+                          </div>
+                        
+                      </div>
                       <div className="row">
                            {
                               this.state.mycourses.map(({node})=>{
